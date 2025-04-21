@@ -46,8 +46,8 @@ fun HomePage(
 
         Row(
             modifier = Modifier
-                .padding(horizontal = 12.dp)
                 .fillMaxWidth()
+                .padding(horizontal = 12.dp)
                 .border(
                     width = 1.dp,
                     color = colorResource(R.color.view_gray),
