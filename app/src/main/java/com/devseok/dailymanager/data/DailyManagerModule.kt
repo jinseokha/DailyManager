@@ -10,5 +10,5 @@ import dagger.hilt.android.components.ViewModelComponent
 interface DailyManagerModule {
 
     @Binds
-    fun bindRepository(dailyManagerRepository: DailyManagerRepository)
+    fun bindRepository(dailyManagerRepository: DailyManagerRepository) : DailyManagerApiRepository
 }
