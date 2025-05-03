@@ -74,6 +74,8 @@ fun CalendarDay(
                     .background(circleColor, CircleShape)
             ) {
                 Text(
+                    modifier = Modifier
+                        .align(Alignment.Center),
                     text = date.dayOfMonth.toString(),
                     fontSize = 12.sp,
                     lineHeight = 12.sp,
