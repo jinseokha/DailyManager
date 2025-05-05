@@ -8,17 +8,25 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +39,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devseok.dailymanager.R
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -39,8 +48,11 @@ import java.time.YearMonth
 fun Calendar(
     modifier: Modifier,
     state: CalendarState,
+    drawerState: DrawerState,
     onClick: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+
 
     LaunchedEffect(state.datePagerState.currentPage) {
         // datePager 현재 페이지가 변경되면(직접 넘겨도) 선택된 날짜를 현재 페이지 첫째 날로 변경
@@ -65,14 +77,28 @@ fun Calendar(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Box(
+        Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(52.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .padding(start = 4.dp)
+            ) {
+                IconButton(onClick = {
+                    scope.launch { drawerState.open() }
+                }) {
+                    Icon(
+                        Icons.Default.Menu,
+                        contentDescription = "Menu"
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier
                     .padding(start = 8.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
@@ -86,26 +112,32 @@ fun Calendar(
                         withStyle(
                             block = { append(state.currentPageYM.run { takeIf { year != LocalDate.now().year }?.let { "${year}. $monthValue" } ?: "$monthValue" }) },
                             style = SpanStyle(
-                                fontSize = 23.sp,
+                                fontSize = 20.sp,
                                 fontWeight = FontWeight.Medium,
                                 baselineShift = BaselineShift(-0.015f)
                             )
                         )
                         state.currentPageYM.takeIf { it.year == LocalDate.now().year }?.let { append("월") }
                     },
-                    fontSize = 22.sp,
+                    fontSize = 20.sp,
                     lineHeight = 22.sp,
                     fontWeight = FontWeight.SemiBold
                 )
+
+                Spacer(
+                    modifier = Modifier
+                        .width(3.dp)
+                )
+
                 Image(
-                    painter = painterResource(R.drawable.ic_arrow_down),
+                    painter = painterResource(R.drawable.ic_arrow_down_svg),
                     contentDescription = "날짜 선택",
                     modifier = Modifier
-                        .size(22.dp)
+                        .size(16.dp)
                 )
             }
 
-            Row(
+            /*Row(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .padding(end = 4.dp)
@@ -116,7 +148,7 @@ fun Calendar(
                 // TODO : 알림 아이콘
 
 
-            }
+            }*/
         }
 
         Row(

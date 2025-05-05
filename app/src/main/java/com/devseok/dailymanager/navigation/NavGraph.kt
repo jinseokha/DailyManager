@@ -2,30 +2,32 @@ package com.devseok.dailymanager.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.devseok.dailymanager.feature.alert.AlertPage
 import com.devseok.dailymanager.feature.calendar.CalendarPage
-import com.devseok.dailymanager.feature.home.HomePage
-import com.devseok.dailymanager.feature.home.HomePageVM
 import com.devseok.dailymanager.feature.setting.SettingPage
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavGraph(navHostController: NavHostController) {
+fun NavGraph(
+    navHostController: NavHostController,
+    drawerState: DrawerState
+) {
 
     NavHost(
         navController = navHostController,
-        startDestination = Route.HomePage.routeName
+        startDestination = Route.CalendarPage.routeName
     ) {
-        composable(Route.HomePage.routeName) {
-            HomePage(navHostController = navHostController)
-        }
 
         composable(Route.CalendarPage.routeName) {
-            CalendarPage(navHostController = navHostController)
+            CalendarPage(
+                navHostController = navHostController,
+                drawerState = drawerState
+            )
         }
 
         composable(Route.SettingPage.routeName) {

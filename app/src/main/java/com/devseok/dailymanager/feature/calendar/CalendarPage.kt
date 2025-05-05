@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +43,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun CalendarPage(
     navHostController: NavHostController,
-    viewModel: CalendarPageBaseVM = hiltViewModel<CalendarPageVM>()
+    viewModel: CalendarPageBaseVM = hiltViewModel<CalendarPageVM>(),
+    drawerState: DrawerState
 ) {
 
     val state = rememberCalendarState()
@@ -88,6 +90,7 @@ fun CalendarPage(
                     .fillMaxWidth()
                     .height(animatedHeight),
                 state = state,
+                drawerState = drawerState,
                 onClick = {
                     state.snapState = CalendarSize.HALF
                     calendarHeight = halfHeight
