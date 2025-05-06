@@ -1,10 +1,12 @@
 [versions]
-agp = "8.4.2"
+agp = "8.7.2"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+
+googleService = "4.4.2"
 
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
@@ -15,7 +17,7 @@ plugins-firebase-crashlytics = "3.0.2"
 plugins-licenses = "0.10.6"
 
 plugins-application = "8.4.2"
-plugins-library = "8.4.2"
+plugins-library = "8.7.2"
 plugins-jetbrains-kotlin = "1.9.22"
 plugins-google-services = "4.4.2"
 plugins-devtools = "1.9.22-1.0.16"
@@ -74,6 +76,7 @@ swipe-layout = "1.2.0-alpha01"
 
 firebase-bom = "33.7.0"
 firebase-messaing = "24.0.3"
+play-auth = "20.7.0"
 
 app-update= "2.1.0"
 tedkeyboardobserver = "1.0.1"
@@ -152,6 +155,9 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 messaing = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaing" }
 crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics"}
 analytics = { group = "com.google.firebase", name = "firebase-analytics"}
+auth = { group = "com.google.firebase", name = "firebase-auth" }
+firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-auth" }
 
 androidx-runtime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-runtime" }
 
@@ -166,7 +172,8 @@ google-devtools = { id = "com.google.devtools.ksp", version.ref="plugins-devtool
 
 application = { id = "com.android.application"}
 crashlytics = { id = "com.google.firebase.crashlytics"}
-services = { id = "com.google.gms.google-services"  }
+google-gms-service = { id = "com.google.gms.google-services" }
+google-gms-services = { id = "com.google.gms.google-services", version.ref = "googleService"  }
 devtools = { id = "com.google.devtools.ksp" }
 google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger"}
 kapt = { id = "kotlin-kapt"}

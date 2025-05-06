@@ -49,7 +49,6 @@ fun MainPage(
     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
     val navController = rememberNavController()
-    val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -111,10 +110,10 @@ fun MainPage(
                     .padding(innerPadding)
                     .background(colorResource(R.color.background))
             ) {
-                NavGraph(
+                /*NavGraph(
                     navHostController = navController,
                     drawerState = drawerState
-                )
+                )*/
             }
         }
     }

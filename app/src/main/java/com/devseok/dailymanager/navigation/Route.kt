@@ -15,4 +15,7 @@ sealed class Route(
 
     object SettingPage: Route(routeName = "setting_page", icon = null)
 
+    object LoginPage: Route(routeName = "login_page", icon = null)
+
+    object SplashPage: Route(routeName = "splash_page", icon = null)
 }

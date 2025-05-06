@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.google.dagger.hilt)
     alias(libs.plugins.devtools)
+    alias(libs.plugins.google.gms.service)
 
     kotlin("android")
 }
@@ -117,6 +118,9 @@ dependencies {
     implementation(libs.messaing)
     implementation(libs.crashlytics)
     implementation(libs.analytics)
+    implementation(libs.auth)
+    implementation(libs.firestore)
+    implementation(libs.play.services.auth)
 
     // hilt
     implementation(libs.google.hilt)
@@ -124,5 +128,7 @@ dependencies {
 
     implementation(libs.androidx.runtime)
     implementation(libs.kotlin.stdlib)
+
+
 
 }

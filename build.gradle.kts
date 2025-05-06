@@ -12,5 +12,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin) apply false
     alias(libs.plugins.google.devtools) apply false
     alias(libs.plugins.google.dagger.hilt) apply false
+    alias(libs.plugins.google.gms.services) apply false
 
 }
