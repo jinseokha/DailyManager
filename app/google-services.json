@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "468332994031",
+    "project_id": "dailymanager-505af",
+    "storage_bucket": "dailymanager-505af.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468332994031:android:c3fee8cce324cc277e2a1a",
+        "android_client_info": {
+          "package_name": "com.devseok.dailymanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468332994031-v3jradjal2f4so9vsleol8lcv8rt22lo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.devseok.dailymanager",
+            "certificate_hash": "c231ba3bd80a9e360986f46b6af8415581c032c8"
+          }
+        },
+        {
+          "client_id": "468332994031-i75hkd7njbg36p5us8isvhutm8ed0lj8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_btHMlKsc-q8RKvCRhAdnSLQP0Iv2cP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468332994031-i75hkd7njbg36p5us8isvhutm8ed0lj8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
