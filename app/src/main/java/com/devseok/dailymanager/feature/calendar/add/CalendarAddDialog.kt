@@ -77,19 +77,41 @@ fun CalendarAddDialog(
             )
 
 
-            Image(
+            Row(
                 modifier = Modifier
-                    .size(32.dp)
-                    .clickable {
-                        onConfirmListener(strText)
-                    },
-                painter = painterResource(R.drawable.ic_send),
-                contentDescription = "add"
-            )
+                    .fillMaxWidth()
+            ) {
+
+                Image(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable {
+
+                        },
+                    painter = painterResource(R.drawable.ic_send),
+                    contentDescription = "add"
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                )
+                
+                Image(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable {
+                            onConfirmListener(strText)
+                        },
+                    painter = painterResource(R.drawable.ic_send),
+                    contentDescription = "add"
+                )
+            }
+
 
             Spacer(
                 modifier = Modifier
-                    .height(70.dp)
+                    .height(15.dp)
             )
         }
     }

@@ -55,6 +55,7 @@ import androidx.navigation.NavHostController
 import com.devseok.dailymanager.R
 import com.devseok.dailymanager.custom.FabItem
 import com.devseok.dailymanager.custom.MultiFloatingActionButton
+import com.devseok.dailymanager.data.CalendarData
 import com.devseok.dailymanager.feature.calendar.add.CalendarAddDialog
 import com.devseok.dailymanager.feature.calendar.function.Calendar
 import com.devseok.dailymanager.feature.calendar.function.CalendarSize
@@ -94,7 +95,18 @@ fun CalendarPage(
                 showAddBottomSheet = false
             },
             onConfirmListener = { value ->
-                viewModel.addMessageToUser(value)
+                val calendarData: CalendarData = CalendarData(
+                    userId = userInfo!!.email!!,
+                    date = state.selectedDate.toString(),
+                    message = value
+                )
+
+                viewModel.addMessageToUser(
+                    data = calendarData,
+                    onResult = { it ->
+                        Log.d("test", "" + it)
+                    }
+                )
             }
         )
     }

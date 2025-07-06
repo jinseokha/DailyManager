@@ -68,9 +68,10 @@ fun LoginPage(
 
     LaunchedEffect(key1 = userInfo) {
         if (userInfo != null) {
-            navController.navigate(Route.CalendarPage.routeName) {
+            navHostController.navigate(Route.CalendarPage.routeName) {
                 popUpTo(Route.CalendarPage.routeName) { inclusive = true }
             }
+
         }
     }
 

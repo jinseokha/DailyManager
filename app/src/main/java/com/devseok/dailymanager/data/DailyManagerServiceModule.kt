@@ -30,7 +30,7 @@ object DailyManagerServiceModule {
         @ApplicationContext context: Context
     ): GoogleSignInClient {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("web_client_id")
+            .requestIdToken("468332994031-9h44ursuhlteeb6am4b74sgq7uasj776.apps.googleusercontent.com")
             .requestEmail()
             .build()
         return GoogleSignIn.getClient(context, gso)

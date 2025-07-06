@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "468332994031-v3jradjal2f4so9vsleol8lcv8rt22lo.apps.googleusercontent.com",
+          "client_id": "468332994031-iqikb14agas1tp0s0vvbgv0gkr3992og.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.devseok.dailymanager",
@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "468332994031-i75hkd7njbg36p5us8isvhutm8ed0lj8.apps.googleusercontent.com",
+          "client_id": "468332994031-9h44ursuhlteeb6am4b74sgq7uasj776.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "468332994031-i75hkd7njbg36p5us8isvhutm8ed0lj8.apps.googleusercontent.com",
+              "client_id": "468332994031-9h44ursuhlteeb6am4b74sgq7uasj776.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
