@@ -54,6 +54,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.devseok.dailymanager.R
+import com.devseok.dailymanager.data.CalendarData
 import com.devseok.dailymanager.data.Utils
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
@@ -67,6 +68,7 @@ fun Calendar(
     state: CalendarState,
     drawerState: DrawerState,
     userInfo: FirebaseUser,
+    saveDataList : Map<LocalDate, List<CalendarData>>,
     onClick: () -> Unit
 ) {
 
@@ -267,6 +269,7 @@ fun Calendar(
 
                                 CalendarDay(
                                     date = date,
+                                    saveDataList = saveDataList,
                                     isToday = isToday,
                                     isSelected = isSelected,
                                     isVisibleMonth = isVisibleMonth,

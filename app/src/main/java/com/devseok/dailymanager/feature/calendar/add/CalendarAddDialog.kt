@@ -82,7 +82,7 @@ fun CalendarAddDialog(
                     .fillMaxWidth()
             ) {
 
-                Image(
+               /* Image(
                     modifier = Modifier
                         .size(32.dp)
                         .clickable {
@@ -90,7 +90,7 @@ fun CalendarAddDialog(
                         },
                     painter = painterResource(R.drawable.ic_send),
                     contentDescription = "add"
-                )
+                )*/
 
                 Spacer(
                     modifier = Modifier
@@ -103,7 +103,7 @@ fun CalendarAddDialog(
                         .clickable {
                             onConfirmListener(strText)
                         },
-                    painter = painterResource(R.drawable.ic_send),
+                    painter = painterResource(R.drawable.baseline_add_24),
                     contentDescription = "add"
                 )
             }

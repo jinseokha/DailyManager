@@ -1,6 +1,7 @@
 package com.devseok.dailymanager.feature.calendar.function
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -19,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.devseok.dailymanager.data.CalendarData
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -29,6 +32,7 @@ import java.time.LocalDate
 @Composable
 fun CalendarDay(
     date: LocalDate,
+    saveDataList : Map<LocalDate, List<CalendarData>>,
     isToday: Boolean,
     isSelected: Boolean,
     isVisibleMonth: Boolean,
@@ -55,6 +59,20 @@ fun CalendarDay(
         }
     }
 
+    var msgs: ArrayList<String> = ArrayList<String>()
+
+    if (saveDataList.size > 0) {
+        val calendarData: List<CalendarData> = saveDataList[date] ?: emptyList()
+
+        for (data in calendarData) {
+            msgs.add(data.message)
+        }
+
+        if (msgs.size > 0) {
+            Log.d("test", "" + msgs.size)
+        }
+    }
+
     Surface(
         onClick = onClick,
         color = Color.White,
@@ -67,22 +85,47 @@ fun CalendarDay(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Box(
-                modifier = Modifier
-                    .padding(top = 2.5.dp)
-                    .size(20.dp)
-                    .background(circleColor, CircleShape)
+            Column(
+
             ) {
-                Text(
+                Box(
                     modifier = Modifier
-                        .align(Alignment.Center),
-                    text = date.dayOfMonth.toString(),
-                    fontSize = 12.sp,
-                    lineHeight = 12.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = textColor
-                )
+                        .padding(top = 2.5.dp)
+                        .size(20.dp)
+                        .background(circleColor, CircleShape)
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        text = date.dayOfMonth.toString(),
+                        fontSize = 12.sp,
+                        lineHeight = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = textColor
+                    )
+                }
+
+                if (msgs.isNotEmpty()) {
+                    msgs.forEach {
+                        Text(
+                            text = it,
+                            fontSize = 10.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    /*msgs.take(2).forEach {
+                        Text(
+                            text = it,
+                            fontSize = 10.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }*/
+                }
+
             }
+
         }
     }
 }
