@@ -186,14 +186,6 @@ fun CalendarPage(
                     .background(colorResource(R.color.background)),
                 topBar = { },
                 floatingActionButton = {
-                    /*MultiFloatingActionButton(
-                        fabIcon = painterResource(id = R.drawable.ic_fab_add),
-                        items = arrayListOf(
-                            FabItem(icon = painterResource(R.drawable.ic_fab_add), label = "Button 1") {
-                                Toast.makeText(context,"Floating Button clicked",Toast.LENGTH_LONG).show()
-                            }
-                        )
-                    )*/
                     FloatingActionButton(
                         containerColor = Color.Black,
                         contentColor = Color.White,
@@ -289,7 +281,7 @@ fun CalendarPage(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(48.dp)
-                                        .padding(horizontal = 20.dp)
+                                        .padding(top = 10.dp, start = 20.dp, end = 20.dp)
                                 ) {
                                     Text(
                                         text = state.selectedDate.format(DateTimeFormatter.ofPattern("d. E")),
@@ -298,27 +290,11 @@ fun CalendarPage(
                                         fontWeight = FontWeight.SemiBold
                                     )
 
-
-                                    /*Text(
-                                        text = state.calculateDaysDifference(),
-                                        fontSize = 17.sp,
-                                        lineHeight = 17.sp,
-                                        fontWeight = FontWeight.SemiBold
-                                    )*/
-
                                     Box(
                                         modifier = Modifier
                                             .size(2.dp)
                                             .background(Color.Black, CircleShape)
                                     )
-
-                                    /*Text(
-                                        text = state.selectedDate.format(DateTimeFormatter.ofPattern("M. d. (E)")),
-                                        fontSize = 15.sp,
-                                        lineHeight = 15.sp,
-                                        fontWeight = FontWeight.Normal,
-                                        color = Color(0xFF999999)
-                                    )*/
                                 }
 
                                 var msgs = ArrayList<String>()
@@ -334,7 +310,7 @@ fun CalendarPage(
                                                 Row(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
-                                                        .padding(start = 10.dp, end = 10.dp, top = 4.dp, bottom = 4.dp)
+                                                        .padding(start = 17.dp, end = 17.dp, top = 10.dp, bottom = 4.dp)
                                                 ) {
                                                     Text(
                                                         text = data.message,
@@ -356,7 +332,6 @@ fun CalendarPage(
                                                                 viewModel.delMessage(
                                                                     data = data,
                                                                     onResult = {
-                                                                        Log.d("test", "" + it)
 
                                                                         viewModel.getAllMessage(
                                                                             onResult = { it ->
@@ -369,79 +344,10 @@ fun CalendarPage(
                                                         painter = painterResource(R.drawable.baseline_delete_24),
                                                         contentDescription = "add"
                                                     )
-
-                                                    /*Text(
-                                                        modifier = Modifier
-                                                            .clickable {
-                                                                Log.d("test", data.id)
-
-                                                                viewModel.delMessage(
-                                                                    data = data,
-                                                                    onResult = {
-                                                                        Log.d("test", "" + it)
-
-                                                                        viewModel.getAllMessage(
-                                                                            onResult = { it ->
-
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                )
-                                                            },
-                                                        text = "삭제",
-                                                        fontSize = 14.sp,
-                                                        maxLines = 1,
-                                                        overflow = TextOverflow.Ellipsis
-                                                    )*/
-
-
                                                 }
-
-
                                         }
                                     }
-
-                                   /* for (data in calendarData) {
-                                        msgs.add(data.message)
-                                    }
-
-                                    if (msgs.isNotEmpty()) {
-                                        msgs.take(2).forEach {
-                                            Row (
-
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                            ) {
-                                                Text(
-                                                    text = it,
-                                                    fontSize = 14.sp,
-                                                    maxLines = 1,
-                                                    overflow = TextOverflow.Ellipsis
-                                                )
-
-                                                Spacer(
-                                                    modifier = Modifier
-                                                        .weight(1f)
-                                                )
-
-                                                Text(
-                                                    modifier = Modifier
-                                                        .clickable {
-                                                            //Log.d("test", )
-                                                        },
-                                                    text = "삭제",
-                                                    fontSize = 14.sp,
-                                                    maxLines = 1,
-                                                    overflow = TextOverflow.Ellipsis
-                                                )
-
-
-                                            }
-
-                                        }
-                                    }*/
                                 }
-
                             }
                         }
                     }
