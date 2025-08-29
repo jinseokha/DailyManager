@@ -27,15 +27,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devseok.dailymanager.R
+import com.github.skydoves.colorpicker.compose.ColorPickerController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarAddDialog(
+    controller: ColorPickerController,
     onCancelListener: () -> Unit,
     onConfirmListener: (String) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     var strText by remember { mutableStateOf("") }
+
 
     ModalBottomSheet(
         onDismissRequest = {

@@ -64,6 +64,7 @@ import com.devseok.dailymanager.feature.calendar.function.CalendarSize
 import com.devseok.dailymanager.feature.calendar.function.rememberCalendarState
 import com.devseok.dailymanager.feature.login.LoginPageVM
 import com.devseok.dailymanager.navigation.Screen
+import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
@@ -94,9 +95,12 @@ fun CalendarPage(
 
     val saveDataList by viewModel.saveDataList.collectAsState()
 
+    val controller = rememberColorPickerController()
+
     // add dialog
     if (showAddBottomSheet) {
         CalendarAddDialog(
+            controller,
             onCancelListener = {
                 showAddBottomSheet = false
             },
