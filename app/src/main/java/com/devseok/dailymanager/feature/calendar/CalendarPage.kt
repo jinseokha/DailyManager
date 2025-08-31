@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
@@ -34,6 +35,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -89,6 +91,7 @@ fun CalendarPage(
     val drawerItems = listOf(Screen.Calender, Screen.Alert, Screen.Settings)
 
     var showAddBottomSheet by remember { mutableStateOf(false) }
+    var showColorPicker by remember { mutableStateOf(false) }
 
     val userInfo by loginViewModel.fireBaseUserInfo.collectAsState()
     val userProfile by loginViewModel.userProfile.collectAsState()
@@ -96,6 +99,24 @@ fun CalendarPage(
     val saveDataList by viewModel.saveDataList.collectAsState()
 
     val controller = rememberColorPickerController()
+
+    if (showColorPicker) {
+        AlertDialog(
+            onDismissRequest = { showColorPicker = false },
+            title = { Text("알림") },
+            text = { Text("이것은 Compose AlertDialog 예시입니다.") },
+            confirmButton = {
+                TextButton(onClick = { showColorPicker = false }) {
+                    Text("확인")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showColorPicker = false }) {
+                    Text("취소")
+                }
+            }
+        )
+    }
 
     // add dialog
     if (showAddBottomSheet) {
