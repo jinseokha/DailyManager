@@ -129,6 +129,6 @@ dependencies {
     implementation(libs.androidx.runtime)
     implementation(libs.kotlin.stdlib)
 
-    implementation(libs.compose.colorpicker)
+        implementation(libs.compose.colorpicker)
 
 }

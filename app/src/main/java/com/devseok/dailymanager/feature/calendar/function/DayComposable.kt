@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.devseok.dailymanager.data.CalendarData
+import com.devseok.dailymanager.data.CalendarDataDTO
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -32,7 +32,7 @@ import java.time.LocalDate
 @Composable
 fun CalendarDay(
     date: LocalDate,
-    saveDataList : Map<LocalDate, List<CalendarData>>,
+    saveDataList : Map<LocalDate, List<CalendarDataDTO>>,
     isToday: Boolean,
     isSelected: Boolean,
     isVisibleMonth: Boolean,
@@ -62,9 +62,9 @@ fun CalendarDay(
     var msgs: ArrayList<String> = ArrayList<String>()
 
     if (saveDataList.size > 0) {
-        val calendarData: List<CalendarData> = saveDataList[date] ?: emptyList()
+        val calendarDatumDTOS: List<CalendarDataDTO> = saveDataList[date] ?: emptyList()
 
-        for (data in calendarData) {
+        for (data in calendarDatumDTOS) {
             msgs.add(data.message)
         }
 

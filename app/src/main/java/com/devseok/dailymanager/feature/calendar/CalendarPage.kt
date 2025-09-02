@@ -21,9 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
@@ -35,7 +33,6 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,15 +56,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.devseok.dailymanager.R
-import com.devseok.dailymanager.data.CalendarData
+import com.devseok.dailymanager.custom.picker.ColorEnvelopeDTO
+import com.devseok.dailymanager.custom.picker.rememberColorPickerController
+import com.devseok.dailymanager.data.CalendarDataDTO
 import com.devseok.dailymanager.feature.calendar.add.CalendarAddDialog
 import com.devseok.dailymanager.feature.calendar.function.Calendar
 import com.devseok.dailymanager.feature.calendar.function.CalendarSize
 import com.devseok.dailymanager.feature.calendar.function.rememberCalendarState
 import com.devseok.dailymanager.feature.login.LoginPageVM
 import com.devseok.dailymanager.navigation.Screen
-import com.github.skydoves.colorpicker.compose.rememberColorPickerController
-import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
@@ -91,7 +88,6 @@ fun CalendarPage(
     val drawerItems = listOf(Screen.Calender, Screen.Alert, Screen.Settings)
 
     var showAddBottomSheet by remember { mutableStateOf(false) }
-    var showColorPicker by remember { mutableStateOf(false) }
 
     val userInfo by loginViewModel.fireBaseUserInfo.collectAsState()
     val userProfile by loginViewModel.userProfile.collectAsState()
@@ -100,23 +96,7 @@ fun CalendarPage(
 
     val controller = rememberColorPickerController()
 
-    if (showColorPicker) {
-        AlertDialog(
-            onDismissRequest = { showColorPicker = false },
-            title = { Text("알림") },
-            text = { Text("이것은 Compose AlertDialog 예시입니다.") },
-            confirmButton = {
-                TextButton(onClick = { showColorPicker = false }) {
-                    Text("확인")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showColorPicker = false }) {
-                    Text("취소")
-                }
-            }
-        )
-    }
+
 
     // add dialog
     if (showAddBottomSheet) {
@@ -125,16 +105,24 @@ fun CalendarPage(
             onCancelListener = {
                 showAddBottomSheet = false
             },
-            onConfirmListener = { value ->
-                val calendarData: CalendarData = CalendarData(
+            onConfirmListener = { value, color ->
+
+                val colorDto = ColorEnvelopeDTO(
+                    colorInt = color.colorInt,
+                    hexCode = color.hexCode,
+                    fromUser = color.fromUser
+                )
+
+                val calendarDataDTO: CalendarDataDTO = CalendarDataDTO(
                     userId = userInfo!!.email!!,
                     date = state.selectedDate.toString(),
                     message = value,
+                    color = colorDto,
                     timestamp = null,
                 )
 
                 viewModel.addMessageToUser(
-                    data = calendarData,
+                    data = calendarDataDTO,
                     onResult = { it ->
                         Log.d("test", "" + it)
                         if (it) {
@@ -326,9 +314,9 @@ fun CalendarPage(
 
                                 if (saveDataList.size > 0) {
 
-                                    val calendarData: List<CalendarData> = saveDataList[state.selectedDate] ?: emptyList()
+                                    val calendarDatumDTOS: List<CalendarDataDTO> = saveDataList[state.selectedDate] ?: emptyList()
 
-                                    for (data in calendarData) {
+                                    for (data in calendarDatumDTOS) {
 
 
                                         if (data.message.isNotEmpty()) {

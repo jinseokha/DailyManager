@@ -3,13 +3,10 @@ package com.devseok.dailymanager.feature.calendar.function
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -54,7 +51,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.devseok.dailymanager.R
-import com.devseok.dailymanager.data.CalendarData
+import com.devseok.dailymanager.data.CalendarDataDTO
 import com.devseok.dailymanager.data.Utils
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
@@ -68,7 +65,7 @@ fun Calendar(
     state: CalendarState,
     drawerState: DrawerState,
     userInfo: FirebaseUser,
-    saveDataList : Map<LocalDate, List<CalendarData>>,
+    saveDataList : Map<LocalDate, List<CalendarDataDTO>>,
     onClick: () -> Unit
 ) {
 

@@ -13,9 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.github.skydoves.colorpicker.compose.ColorEnvelope
-import com.github.skydoves.colorpicker.compose.HsvColorPicker
-import com.github.skydoves.colorpicker.compose.rememberColorPickerController
+import com.devseok.dailymanager.custom.picker.ColorEnvelopeDTO
+import com.devseok.dailymanager.custom.picker.HsvColorPicker
+import com.devseok.dailymanager.custom.picker.rememberColorPickerController
 
 @Composable
 fun AlertPage(
@@ -37,12 +37,12 @@ fun AlertPage(
                 .height(450.dp)
                 .padding(10.dp),
             controller = controller,
-            onColorChanged = { colorEnvelope: ColorEnvelope ->
+            onColorChanged = { colorEnvelopeDTO: ColorEnvelopeDTO ->
                 // do something
 
-                val color: Color = colorEnvelope.color // ARGB color value.
-                val hexCode: String = colorEnvelope.hexCode // Color hex code, which represents color value.
-                val fromUser: Boolean = colorEnvelope.fromUser
+                val color: Color = colorEnvelopeDTO.color // ARGB color value.
+                val hexCode: String = colorEnvelopeDTO.hexCode // Color hex code, which represents color value.
+                val fromUser: Boolean = colorEnvelopeDTO.fromUser
 
                 Log.d("testtest", "color = " + color)
                 Log.d("testtest", "hexCode = " + hexCode)
