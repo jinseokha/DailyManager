@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,31 +25,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devseok.dailymanager.R
-import com.devseok.dailymanager.custom.picker.AlphaTile
 import com.devseok.dailymanager.custom.picker.ColorEnvelopeDTO
-import com.devseok.dailymanager.custom.picker.ColorPickerController
 import com.devseok.dailymanager.custom.picker.HsvColorPicker
 import com.devseok.dailymanager.custom.picker.rememberColorPickerController
+import com.devseok.dailymanager.data.CalendarDataDTO
+
+/**
+ * @author Ha Jin Seok
+ * @created 2025-09-05
+ * @desc
+ */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalendarAddDialog(
-    controller: ColorPickerController,
+fun CalendarEditDialog(
+    calendarDataDTO: CalendarDataDTO,
     onCancelListener: () -> Unit,
-    onConfirmListener: (String, ColorEnvelopeDTO) -> Unit,
+    onConfirmListener: (CalendarDataDTO) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
-    var strText by remember { mutableStateOf("") }
+    var strText by remember { mutableStateOf(calendarDataDTO.message) }
 
     var currentColorEnvelopeDTO by remember {
         mutableStateOf(
-            ColorEnvelopeDTO()
+            calendarDataDTO.color
         )
     }
 
@@ -60,9 +63,12 @@ fun CalendarAddDialog(
 
     if (showColorPicker) {
         var saveColorEnvelopeDTO: ColorEnvelopeDTO = currentColorEnvelopeDTO
+
         AlertDialog(
-            onDismissRequest = { showColorPicker = false },
-            title = { Text("알림") },
+            onDismissRequest = {
+                showColorPicker = false
+            },
+            title = { Text(text = "알림") },
             text = {
                 Column(
 
@@ -91,7 +97,6 @@ fun CalendarAddDialog(
 
                     }
                 }
-
             },
             confirmButton = {
                 TextButton(onClick = {
@@ -148,7 +153,6 @@ fun CalendarAddDialog(
                     .height(30.dp)
             )
 
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -163,27 +167,6 @@ fun CalendarAddDialog(
                         }
                 )
 
-
-                /*AlphaTile(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .clickable {
-                            showColorPicker = true
-                        },
-                    controller = controller,
-                )
-*/
-              /*  Image(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clickable {
-                            showColorPicker = true
-                        },
-                    painter = painterResource(R.drawable.ic_send),
-                    contentDescription = "add"
-                )*/
-
                 Spacer(
                     modifier = Modifier
                         .weight(1f)
@@ -193,18 +176,51 @@ fun CalendarAddDialog(
                     modifier = Modifier
                         .size(32.dp)
                         .clickable {
-                            onConfirmListener(strText, currentColorEnvelopeDTO)
+                            val saveCalendarDTO = CalendarDataDTO(
+                                id = calendarDataDTO.id,
+                                userId = calendarDataDTO.userId,
+                                date = calendarDataDTO.date,
+                                message = strText,
+                                color = currentColorEnvelopeDTO
+                            )
+
+                            onConfirmListener(saveCalendarDTO)
                         },
                     painter = painterResource(R.drawable.baseline_add_24),
                     contentDescription = "add"
                 )
+
             }
 
-
-            Spacer(
-                modifier = Modifier
-                    .height(15.dp)
-            )
         }
+
+
     }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

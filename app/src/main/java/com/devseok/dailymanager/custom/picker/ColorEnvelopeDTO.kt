@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.Color
  */
 @Immutable
 public data class ColorEnvelopeDTO(
-    val colorInt: Int = 0xFFFFFFFF.toInt(),
-    val hexCode: String = "FFFFFFFF",
+    val colorInt: Int = 0xFF3457EA.toInt(),
+    val hexCode: String = "FF3457EA",
     val fromUser: Boolean = false,
 ) {
     val color: Color

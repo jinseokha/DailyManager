@@ -10,6 +10,7 @@ import com.devseok.dailymanager.custom.picker.ColorEnvelopeDTO
 import com.devseok.dailymanager.data.CalendarDataDTO
 import com.devseok.dailymanager.data.DailyManagerRepository
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.util.CollectionUtils.mapOf
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.collections.mapOf
 
 @HiltViewModel
 class CalendarPageVM @Inject constructor(
@@ -58,21 +60,6 @@ class CalendarPageVM @Inject constructor(
             return
         }
 
-       /* val data = mapOf(
-            "text" to "test",
-            "timestamp" to FieldValue.serverTimestamp()
-        )
-
-        firestore.collection("calendar")
-            .document(uid)
-            .collection("messages")
-            .add(data)
-            .addOnSuccessListener {
-                Log.d("Firestore", "Message added to user 'a'")
-            }
-            .addOnFailureListener {
-                Log.e("Firestore", "Failed to add message", it)
-            }*/
         val colorMap = mapOf(
             "colorInt" to data.color.color.toArgb(),
             "hexCode" to data.color.hexCode,
@@ -97,6 +84,39 @@ class CalendarPageVM @Inject constructor(
             .addOnFailureListener { it ->
                 onResult(false)
             }
+    }
+
+    fun updateMessageToUser(data: CalendarDataDTO, onResult: (Boolean) -> Unit) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid == null) {
+            Log.e("Firestore", "User not logged in")
+            return
+        }
+
+        val updateMap = mapOf(
+            "userId" to data.userId,
+            "date" to data.date,
+            "message" to data.message,
+            "color" to mapOf(
+                "colorInt" to data.color.color.toArgb(),
+                "hexCode" to data.color.hexCode,
+                "fromUser" to data.color.fromUser
+            ),
+            "timestamp" to data.timestamp
+        )
+
+        firestore.collection("calendar")
+            .document(uid)
+            .collection("messages")
+            .document(data.id)
+            .update(updateMap)
+            .addOnSuccessListener {
+                onResult(true)
+            }
+            .addOnFailureListener {
+                onResult(false)
+            }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -7,9 +7,15 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -59,17 +65,13 @@ fun CalendarDay(
         }
     }
 
-    var msgs: ArrayList<String> = ArrayList<String>()
+    var msgs: ArrayList<CalendarDataDTO> = ArrayList<CalendarDataDTO>()
 
     if (saveDataList.size > 0) {
         val calendarDatumDTOS: List<CalendarDataDTO> = saveDataList[date] ?: emptyList()
 
         for (data in calendarDatumDTOS) {
-            msgs.add(data.message)
-        }
-
-        if (msgs.size > 0) {
-            Log.d("test", "" + msgs.size)
+            msgs.add(data)
         }
     }
 
@@ -86,10 +88,13 @@ fun CalendarDay(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column(
-
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 4.dp)
             ) {
                 Box(
                     modifier = Modifier
+
                         .padding(top = 2.5.dp)
                         .size(20.dp)
                         .background(circleColor, CircleShape)
@@ -107,21 +112,33 @@ fun CalendarDay(
 
                 if (msgs.isNotEmpty()) {
                     msgs.forEach {
-                        Text(
-                            text = it,
-                            fontSize = 10.sp,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(12.dp)
+                                //.background(it.color.color)
+                        ) {
+                            Spacer(
+                                modifier = Modifier
+                                    .width(2.dp)
+                                    .height(12.dp)
+                                    .background(it.color.color)
+                            )
+
+                            Spacer(
+                                modifier = Modifier
+                                    .width(3.dp)
+                            )
+
+                            Text(
+                                text = it.message,
+                                fontSize = 10.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
-                    /*msgs.take(2).forEach {
-                        Text(
-                            text = it,
-                            fontSize = 10.sp,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }*/
+
                 }
 
             }
