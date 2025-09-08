@@ -116,6 +116,7 @@ fun CalendarPage(
     val userProfile by loginViewModel.userProfile.collectAsState()
 
     val saveDataList by viewModel.saveDataList.collectAsState()
+    val holidayList by viewModel.holidayList.collectAsState()
 
     val controller = rememberColorPickerController()
 
@@ -264,6 +265,13 @@ fun CalendarPage(
         )
     }
 
+    LaunchedEffect(key1 = state.selectedDate) {
+        viewModel.getHoliDeInfo(
+            solMonth = state.selectedDate.month.value.toString(),
+            solYear = state.selectedDate.year.toString()
+        )
+    }
+
     val statusBarPadding = WindowInsets
         .statusBars            // 시스템 UI 중 Status Bar(상단바)의 inset 정보를 가져옴
         .asPaddingValues()     // Insets 값을 Compose가 사용하는 PaddingValues 형태로 변환
@@ -313,6 +321,7 @@ fun CalendarPage(
                 floatingActionButton = {},
                 ) { innerPadding ->
                 saveDataList.let { dataList ->
+
                     BoxWithConstraints(
                         modifier = Modifier
                             .padding(innerPadding)
@@ -354,10 +363,12 @@ fun CalendarPage(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(animatedHeight),
+                                viewModel = viewModel,
                                 state = state,
                                 userInfo = userInfo!!,
                                 drawerState = drawerState,
                                 saveDataList = saveDataList,
+                                holidayList = holidayList,
                                 onClick = {
                                     state.snapState = CalendarSize.HALF
                                     calendarHeight = halfHeight

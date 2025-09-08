@@ -42,6 +42,7 @@ fun CalendarDay(
     isToday: Boolean,
     isSelected: Boolean,
     isVisibleMonth: Boolean,
+    isHoliday: Boolean,
     onClick: () -> Unit
 ) {
     // 날짜 텍스트 배경색 - 일요일은 빨강, 나머지는 검정
@@ -55,9 +56,10 @@ fun CalendarDay(
 
     // 날짜 글자색 - 오늘이라면 배경색과 대비되는 하양,
     // 그외 일요일은 빨강, 나머지는 검정으로 하되 현재 달이 아니라면 투명도 조절
-    val textColor = remember(isToday, isVisibleMonth) {
+    val textColor = remember(isToday, isHoliday, isVisibleMonth) {
         when {
             isToday -> Color.White
+            isHoliday -> Color.Red
             !isVisibleMonth && date.dayOfWeek == DayOfWeek.SUNDAY -> Color.Red.copy(alpha = 0.3f)
             !isVisibleMonth -> Color.DarkGray.copy(alpha = 0.3f)
             date.dayOfWeek == DayOfWeek.SUNDAY -> Color.Red

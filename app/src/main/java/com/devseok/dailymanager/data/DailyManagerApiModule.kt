@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -19,7 +20,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DailyManagerApiModule {
     private val testSearchServerAddr: String
-        get() = "https://test.com/"
+        get() = "https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/"
 
 
     @Singleton
@@ -28,7 +29,7 @@ object DailyManagerApiModule {
     fun provideDailyManager(): Retrofit =
         Retrofit.Builder()
             .baseUrl(testSearchServerAddr)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(SimpleXmlConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
 }

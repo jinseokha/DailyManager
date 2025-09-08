@@ -1,5 +1,6 @@
 package com.devseok.dailymanager.feature.calendar
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.devseok.dailymanager.custom.picker.ColorEnvelopeDTO
 import com.devseok.dailymanager.data.CalendarDataDTO
 import com.devseok.dailymanager.data.DailyManagerRepository
+import com.devseok.dailymanager.data.response.HolidayResponse
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.util.CollectionUtils.mapOf
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.LocalDate
 import javax.inject.Inject
@@ -32,6 +35,46 @@ class CalendarPageVM @Inject constructor(
 
     val _saveDataList: MutableStateFlow<Map<LocalDate, List<CalendarDataDTO>>> = MutableStateFlow(emptyMap())
     val saveDataList = _saveDataList.asStateFlow()
+
+    val _holidayResponse: MutableStateFlow<HolidayResponse> = MutableStateFlow(
+        HolidayResponse(
+            header = null,
+            body = null
+        )
+    )
+    val holidayResponse: StateFlow<HolidayResponse> = _holidayResponse.asStateFlow()
+
+    val _holildayList: MutableStateFlow<ArrayList<String>> = MutableStateFlow(ArrayList())
+    val holidayList = _holildayList.asStateFlow()
+
+    @SuppressLint("CheckResult")
+    suspend fun getHoliDeInfo(
+        solMonth: String,
+        solYear: String
+    ) {
+        repository.getHoliDeInfo(
+            solMonth = solMonth,
+            solYear = solYear
+        )
+            .subscribe({ response ->
+                if (response.body != null) {
+                    if (response.body!!.totalCount > 0) {
+                        var arraylist: ArrayList<String> = ArrayList()
+                        for (item in response.body!!.items!!.item) {
+                            arraylist.add(item.locdate!!)
+                        }
+
+                        _holildayList.value = arraylist
+                    } else {
+
+                    }
+                }
+                Log.d("test", "" + response)
+            }, { throwable ->
+                Log.d("test", "" + throwable.message)
+            })
+
+    }
 
     fun delMessage(data: CalendarDataDTO, onResult: (Boolean) -> Unit) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid

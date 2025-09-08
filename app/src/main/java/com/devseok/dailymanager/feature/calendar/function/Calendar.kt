@@ -3,6 +3,7 @@ package com.devseok.dailymanager.feature.calendar.function
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,6 +64,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.devseok.dailymanager.R
 import com.devseok.dailymanager.data.CalendarDataDTO
 import com.devseok.dailymanager.data.Utils
+import com.devseok.dailymanager.feature.calendar.CalendarPageVM
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -71,10 +74,12 @@ import java.time.YearMonth
 @Composable
 fun Calendar(
     modifier: Modifier,
+    viewModel: CalendarPageVM,
     state: CalendarState,
     drawerState: DrawerState,
     userInfo: FirebaseUser,
     saveDataList : Map<LocalDate, List<CalendarDataDTO>>,
+    holidayList: ArrayList<String>,
     onClick: () -> Unit
 ) {
 
@@ -105,6 +110,12 @@ fun Calendar(
         }
     }
 
+    LaunchedEffect(key1 = holidayList) {
+        if (holidayList.size > 0) {
+            Log.d("testtest", "holidayList_size = " + holidayList[1])
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -122,17 +133,6 @@ fun Calendar(
                     .padding(start = 8.dp, end = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                /*IconButton(
-                    onClick = {
-                        scope.launch { drawerState.open() }
-                    }
-                ) {
-                    Icon(
-                        Icons.Default.Menu,
-                        contentDescription = "Menu"
-                    )
-                }*/
-
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
@@ -157,46 +157,26 @@ fun Calendar(
 
                             Text(
                                 text =
-                                    buildAnnotatedString {
-                                        val ym = state.currentPageYM
-                                        append("${ym.year}년 ${ym.monthValue}월")
+                                buildAnnotatedString {
+                                    val ym = state.currentPageYM
+                                    append("${ym.year}년 ${ym.monthValue}월")
 
-                                        // 스타일 적용
-                                        addStyle(
-                                            style = SpanStyle(
-                                                fontSize = 20.sp,
-                                                fontWeight = FontWeight.Medium,
-                                                baselineShift = BaselineShift(-0.015f)
-                                            ),
-                                            start = 0,
-                                            end = this.length
-                                        )
-                                    }
-                                    /*buildAnnotatedString {
-                                    withStyle(
-                                        block = { append(state.currentPageYM.run { takeIf { year != LocalDate.now().year }?.let { "${year}. $monthValue" } ?: "$monthValue" }) },
+                                    // 스타일 적용
+                                    addStyle(
                                         style = SpanStyle(
                                             fontSize = 20.sp,
                                             fontWeight = FontWeight.Medium,
                                             baselineShift = BaselineShift(-0.015f)
-                                        )
+                                        ),
+                                        start = 0,
+                                        end = this.length
                                     )
-                                    state.currentPageYM.takeIf { it.year == LocalDate.now().year }?.let { append("월") }
-                                }*/
+                                }
                                 ,
                                 fontSize = 20.sp,
                                 lineHeight = 22.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
-
-
-
-                            /*Image(
-                                painter = painterResource(R.drawable.ic_arrow_down_svg),
-                                contentDescription = "날짜 선택",
-                                modifier = Modifier
-                                    .size(16.dp)
-                            )*/
                         }
                     }
 
@@ -301,11 +281,18 @@ fun Calendar(
                                 val isSelected = remember(date, state.selectedDate) { date == state.selectedDate }
                                 val isVisibleMonth = remember { YearMonth.from(date) == pageYearMonth }
 
+                                val isHoliday = remember {
+                                    val holidaydate = date.toString().replace("-", "")
+                                    holidayList.contains(holidaydate)
+                                }
+
+
                                 CalendarDay(
                                     date = date,
                                     saveDataList = saveDataList,
                                     isToday = isToday,
                                     isSelected = isSelected,
+                                    isHoliday = isHoliday,
                                     isVisibleMonth = isVisibleMonth,
                                     onClick = {
                                         state.selectedDate = date
@@ -319,4 +306,5 @@ fun Calendar(
             }
         }
     }
+
 }
