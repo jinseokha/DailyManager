@@ -87,6 +87,7 @@ kotlin-stdlib = "2.0.20"
 oss-licenses = "17.1.0"
 
 colorpicker = "1.1.2"
+composeTesting = "1.0.0-alpha06"
 
 [libraries]
 
@@ -166,6 +167,7 @@ androidx-runtime = { group = "androidx.work", name = "work-runtime-ktx", version
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin-stdlib" }
 
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
+androidx-compose-testing = { group = "androidx.xr.compose", name = "compose-testing", version.ref = "composeTesting" }
 
 
 [plugins]

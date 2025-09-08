@@ -18,33 +18,42 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.Glide
@@ -75,6 +84,9 @@ fun Calendar(
     // image bitmap
     val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
 
+    var isMonthExpanded by remember { mutableStateOf(false) }
+    var isDropdownMenuExpanded by remember { mutableStateOf(false) }
+
     LaunchedEffect(state.datePagerState.currentPage) {
         // datePager 현재 페이지가 변경되면(직접 넘겨도) 선택된 날짜를 현재 페이지 첫째 날로 변경
         state.currentPageYM.takeIf {
@@ -101,7 +113,7 @@ fun Calendar(
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .height(52.dp),
+                .height(65.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
@@ -110,7 +122,7 @@ fun Calendar(
                     .padding(start = 8.dp, end = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(
+                /*IconButton(
                     onClick = {
                         scope.launch { drawerState.open() }
                     }
@@ -119,7 +131,7 @@ fun Calendar(
                         Icons.Default.Menu,
                         contentDescription = "Menu"
                     )
-                }
+                }*/
 
                 Row (
                     modifier = Modifier
@@ -138,8 +150,29 @@ fun Calendar(
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            Spacer(
+                                modifier = Modifier
+                                    .width(3.dp)
+                            )
+
                             Text(
-                                text = buildAnnotatedString {
+                                text =
+                                    buildAnnotatedString {
+                                        val ym = state.currentPageYM
+                                        append("${ym.year}년 ${ym.monthValue}월")
+
+                                        // 스타일 적용
+                                        addStyle(
+                                            style = SpanStyle(
+                                                fontSize = 20.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                baselineShift = BaselineShift(-0.015f)
+                                            ),
+                                            start = 0,
+                                            end = this.length
+                                        )
+                                    }
+                                    /*buildAnnotatedString {
                                     withStyle(
                                         block = { append(state.currentPageYM.run { takeIf { year != LocalDate.now().year }?.let { "${year}. $monthValue" } ?: "$monthValue" }) },
                                         style = SpanStyle(
@@ -149,23 +182,21 @@ fun Calendar(
                                         )
                                     )
                                     state.currentPageYM.takeIf { it.year == LocalDate.now().year }?.let { append("월") }
-                                },
+                                }*/
+                                ,
                                 fontSize = 20.sp,
                                 lineHeight = 22.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
 
-                            Spacer(
-                                modifier = Modifier
-                                    .width(3.dp)
-                            )
 
-                            Image(
+
+                            /*Image(
                                 painter = painterResource(R.drawable.ic_arrow_down_svg),
                                 contentDescription = "날짜 선택",
                                 modifier = Modifier
                                     .size(16.dp)
-                            )
+                            )*/
                         }
                     }
 
@@ -191,14 +222,17 @@ fun Calendar(
                         })
 
                     bitmap.value?.asImageBitmap()?.let { fetchedBitmap ->
+
                         Image(
                             bitmap = fetchedBitmap,
                             contentDescription = null,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
-
                                 .size(32.dp)
-                                .clip(CircleShape),
+                                .clip(CircleShape)
+                                .clickable {
+                                    isDropdownMenuExpanded = true
+                                },
                         )
                     } ?: Image(
                         painter = painterResource(id = R.drawable.account_circle_24dp_1f1f1f),
@@ -207,9 +241,12 @@ fun Calendar(
                         modifier = Modifier
                             .size(32.dp)
                             .clip(CircleShape)
+
                     )
                 }
+                if (isDropdownMenuExpanded) {
 
+                }
             }
         }
 

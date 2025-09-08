@@ -11,19 +11,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -42,6 +47,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,9 +58,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -62,6 +70,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.devseok.dailymanager.R
@@ -113,6 +122,9 @@ fun CalendarPage(
     BackHandler {
         exitDialogState = true
     }
+
+    val window = (LocalView.current.context as Activity).window
+    WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
 
     if (exitDialogState) {
         AlertDialog(
@@ -223,7 +235,6 @@ fun CalendarPage(
                 viewModel.addMessageToUser(
                     data = calendarDataDTO,
                     onResult = { it ->
-                        Log.d("test", "" + it)
                         if (it) {
 
                             val userid = userInfo!!.email!!
@@ -252,6 +263,11 @@ fun CalendarPage(
             }
         )
     }
+
+    val statusBarPadding = WindowInsets
+        .statusBars            // 시스템 UI 중 Status Bar(상단바)의 inset 정보를 가져옴
+        .asPaddingValues()     // Insets 값을 Compose가 사용하는 PaddingValues 형태로 변환
+        .calculateTopPadding() // 변환된 PaddingValues에서 상단(Top) 패딩 값만 추출 → Status Bar 높이
 
     if (userInfo != null) {
         ModalNavigationDrawer(
@@ -288,27 +304,14 @@ fun CalendarPage(
             }
         ) {
             Scaffold(
+                contentWindowInsets = WindowInsets(0.dp), // ← SafeArea 제거
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(R.color.background)),
+                    .background(colorResource(R.color.background))
+                    .padding(top = statusBarPadding),
                 topBar = { },
-                floatingActionButton = {
-                    FloatingActionButton(
-                        containerColor = Color.Black,
-                        contentColor = Color.White,
-                        shape = CircleShape,
-                        onClick = {
-                            showAddBottomSheet = true
-                        }
-                    ) {
-                        Icon(
-                            painterResource(R.drawable.ic_fab_add),
-                            "add"
-                        )
-                    }
-                },
-
-            ) { innerPadding ->
+                floatingActionButton = {},
+                ) { innerPadding ->
                 saveDataList.let { dataList ->
                     BoxWithConstraints(
                         modifier = Modifier
@@ -361,19 +364,13 @@ fun CalendarPage(
                                 }
                             )
 
-                            if (userProfile != null) {
-                                Log.d("test", "" + userProfile)
-                            }
-
                             HorizontalDivider(
                                 modifier = Modifier
                                     .padding(
-                                        start = 16.dp,
-                                        top = 8.dp,
-                                        end = 16.dp,
-                                        bottom = 0.dp
+                                        start = 5.dp,
+                                        end = 5.dp
                                     ),
-                                color = Color(0xFFE0E0E0),
+                                color = Color(0xFFD9D9D9),
                                 thickness = 1.dp
                             )
 
@@ -387,7 +384,8 @@ fun CalendarPage(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(48.dp)
-                                        .padding(top = 10.dp, start = 20.dp, end = 20.dp)
+                                        .padding(top = 6.dp, start = 15.dp, end = 15.dp, bottom = 6.dp),
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Text(
                                         text = state.selectedDate.format(DateTimeFormatter.ofPattern("d. E")),
@@ -403,73 +401,130 @@ fun CalendarPage(
                                     )
                                 }
 
-                                if (saveDataList.size > 0) {
+                                HorizontalDivider(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    color = Color(0xFFD9D9D9),
+                                    thickness = 1.dp
+                                )
 
-                                    val calendarDatumDTOS: List<CalendarDataDTO> = saveDataList[state.selectedDate] ?: emptyList()
+                                LazyColumn {
+                                    item {
+                                        if (saveDataList.size > 0) {
 
-                                    for (data in calendarDatumDTOS) {
+                                            val calendarDatumDTOS: List<CalendarDataDTO> = saveDataList[state.selectedDate] ?: emptyList()
 
-                                        if (data.message.isNotEmpty()) {
-                                                Row(
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .height(42.dp)
-                                                        .padding(start = 17.dp, end = 17.dp, top = 10.dp, bottom = 4.dp)
-                                                        .background(colorResource(R.color.white))
-                                                        .clickable {
-                                                            editCalendarPageDTO = data
+                                            for (data in calendarDatumDTOS) {
 
-                                                            showEditBottomSheet = true
-                                                        },
-                                                    verticalAlignment = Alignment.CenterVertically
-                                                ) {
-                                                    Spacer(
+                                                if (data.message.isNotEmpty()) {
+                                                    Row(
                                                         modifier = Modifier
-                                                            .width(5.dp)
-                                                            .height(42.dp)
-                                                            .background(data.color.color)
-                                                    )
-
-                                                    Spacer(
-                                                        modifier = Modifier
-                                                            .width(10.dp)
-                                                    )
-
-                                                    Text(
-                                                        text = data.message,
-                                                        fontSize = 20.sp,
-                                                        maxLines = 1,
-                                                        overflow = TextOverflow.Ellipsis
-                                                    )
-
-                                                    Spacer(
-                                                        modifier = Modifier
-                                                            .weight(1f)
-                                                    )
-
-                                                    Image(
-                                                        modifier = Modifier
-                                                            .size(32.dp)
+                                                            .fillMaxWidth()
+                                                            .height(50.dp)
+                                                            .padding(start = 10.dp, end = 10.dp, top = 3.dp, bottom = 3.dp)
+                                                            .background(colorResource(R.color.white))
                                                             .clickable {
+                                                                editCalendarPageDTO = data
 
-                                                                viewModel.delMessage(
-                                                                    data = data,
-                                                                    onResult = {
-                                                                        viewModel.getAllMessage(
-                                                                            onResult = { it ->
-
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                )
+                                                                showEditBottomSheet = true
                                                             },
-                                                        painter = painterResource(R.drawable.baseline_delete_24),
-                                                        contentDescription = "add"
+                                                        verticalAlignment = Alignment.CenterVertically
+                                                    ) {
+                                                        Spacer(
+                                                            modifier = Modifier
+                                                                .width(5.dp)
+                                                                .height(42.dp)
+                                                                .background(data.color.color)
+                                                        )
+
+                                                        Spacer(
+                                                            modifier = Modifier
+                                                                .width(10.dp)
+                                                        )
+
+                                                        Text(
+                                                            text = data.message,
+                                                            fontSize = 16.sp,
+                                                            maxLines = 1,
+                                                            overflow = TextOverflow.Ellipsis
+                                                        )
+
+                                                        Spacer(
+                                                            modifier = Modifier
+                                                                .weight(1f)
+                                                        )
+
+                                                        Image(
+                                                            modifier = Modifier
+                                                                .size(32.dp)
+                                                                .clickable {
+
+                                                                    viewModel.delMessage(
+                                                                        data = data,
+                                                                        onResult = {
+                                                                            viewModel.getAllMessage(
+                                                                                onResult = { it ->
+
+                                                                                }
+                                                                            )
+                                                                        }
+                                                                    )
+                                                                },
+                                                            painter = painterResource(R.drawable.baseline_arrow_forward_ios_24),
+                                                            contentDescription = "add"
+                                                        )
+                                                    }
+
+                                                    HorizontalDivider(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                start = 5.dp,
+                                                                end = 5.dp
+                                                            ),
+                                                        color = Color(0xFFD9D9D9),
+                                                        thickness = 1.dp
                                                     )
                                                 }
+                                            }
                                         }
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(50.dp)
+                                                .background(colorResource(R.color.white))
+                                                .clickable {
+                                                    showAddBottomSheet = true
+                                                },
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.Center
+                                        ) {
+                                            Text(
+                                                modifier = Modifier
+                                                    .padding(top = 6.dp, bottom = 6.dp),
+                                                text = "새 일정 추가 +",
+                                                fontSize = 16.sp,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        }
+
+                                        HorizontalDivider(
+                                            modifier = Modifier
+                                                .padding(
+                                                    start = 5.dp,
+                                                    end = 5.dp
+                                                ),
+                                            color = Color(0xFFD9D9D9),
+                                            thickness = 1.dp
+                                        )
                                     }
                                 }
+
+
                             }
                         }
                     }
